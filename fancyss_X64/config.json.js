@@ -1,7 +1,7 @@
 {
 "version":"2.2.2",
 "md5":"898cbc05fd75908d4a99d7320bcca000",
-"home_url":"Module_koolss.asp",
+"home_url":"Module_justdoit.asp",
 "title":"科学上网插件",
 "description":"轻松科学上网~",
 "changelog":"支持2.30",

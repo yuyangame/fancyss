@@ -23,7 +23,7 @@ rm -rf $KSROOT/bin/resolveip
 rm -rf $KSROOT/bin/busybox
 rm -rf $KSROOT/bin/ps
 rm -rf $KSROOT/webs/res/icon-shadowsocks*
-rm -rf $KSROOT/webs/res/icon-koolss*
+rm -rf $KSROOT/webs/res/icon-justdoit*
 rm -rf /usr/lib/lua/luci/controller/sadog.lua
 rm -rf /tmp/luci-*
 
@@ -34,9 +34,9 @@ dbus remove softcenter_module_shadowsocks_name
 dbus remove softcenter_module_shadowsocks_title
 dbus remove softcenter_module_shadowsocks_version
 
-dbus remove softcenter_module_koolss_description
-dbus remove softcenter_module_koolss_install
-dbus remove softcenter_module_koolss_md5
-dbus remove softcenter_module_koolss_name
-dbus remove softcenter_module_koolss_title
-dbus remove softcenter_module_koolss_version
+dbus remove softcenter_module_justdoit_description
+dbus remove softcenter_module_justdoit_install
+dbus remove softcenter_module_justdoit_md5
+dbus remove softcenter_module_justdoit_name
+dbus remove softcenter_module_justdoit_title
+dbus remove softcenter_module_justdoit_version

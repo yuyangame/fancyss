@@ -6,7 +6,7 @@ source $KSROOT/scripts/base.sh
 eval `dbus export ss_`
 echo "" > /tmp/upload/ss_log.txt
 
-# used by Module_koolss.asp
+# used by Module_justdoit.asp
 case $2 in
 1)
 	if [ "$ss_basic_enable" == "1" ];then

@@ -14,7 +14,7 @@ version_WhiteList1=$(cat $KSROOT/ss/rules/version | sed -n 6p | sed 's/ /\n/g'| 
 
 update_rule(){
 	echo =======================================================================================================
-	echo_date 开始更新koolss规则，请等待...
+	echo_date 开始更新justdoit规则，请等待...
 	wget --no-check-certificate --timeout=8 -qO - $url_main/version1 > /tmp/version1
 	if [ "$?" == "0" ]; then
 		echo_date 检测到在线版本文件，继续...
@@ -204,7 +204,7 @@ update_rule(){
 	
 	# reboot ss
 	if [ "$reboot" == "1" ];then
-		echo_date 自动重启koolss，以应用新的规则文件！请稍后！
+		echo_date 自动重启justdoit，以应用新的规则文件！请稍后！
 		sh $KSROOT/ss/ssstart.sh restart
 	fi
 	

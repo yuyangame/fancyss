@@ -1,10 +1,10 @@
 #!/bin/sh
 
-MODULE=koolss
-VERSION=`cat koolss/ss/version`
+MODULE=justdoit
+VERSION=`cat justdoit/ss/version`
 TITLE=科学上网插件
 DESCRIPTION="轻松科学上网~"
-HOME_URL=Module_koolss.asp
+HOME_URL=Module_justdoit.asp
 CHANGELOG="支持2.30"
 
 # Check and include base

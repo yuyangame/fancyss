@@ -7,9 +7,9 @@ LOG_FILE=/tmp/upload/ss_log.txt
 
 
 remove_conf_all(){
-	echo_date 尝试关闭koolss...
+	echo_date 尝试关闭justdoit...
 	sh $KSROOT/ss/ssstart.sh stop
-	echo_date 开始清理koolss配置...
+	echo_date 开始清理justdoit配置...
 	confs=`dbus list ss | cut -d "=" -f 1 | grep -v "version"`
 	for conf in $confs
 	do
@@ -23,7 +23,7 @@ remove_conf_all(){
 }
 
 remove_ss_node(){
-	echo_date 开始清理koolss节点配置...
+	echo_date 开始清理justdoit节点配置...
 	confs1=`dbus list ssconf | cut -d "=" -f 1`
 	confs2=`dbus list ssrconf | cut -d "=" -f 1`
 	for conf in $confs1 $confs2 $confs3
@@ -35,7 +35,7 @@ remove_ss_node(){
 }
 
 remove_ss_acl(){
-	echo_date 开始清理koolss配置...
+	echo_date 开始清理justdoit配置...
 	confs=`dbus list ss_acl | cut -d "=" -f 1`
 	for conf in $confs
 	do
@@ -169,21 +169,21 @@ case $2 in
 	;;
 6)
 	#打包ss插件
-	rm -rf /tmp/koolss*
-	rm -rf /koolshare/webs/files/koolss*
+	rm -rf /tmp/justdoit*
+	rm -rf /koolshare/webs/files/justdoit*
 	echo_date "开始打包..." > $LOG_FILE
 	echo_date "请等待一会儿...下载会自动开始." >> $LOG_FILE
 	mkdir -p /koolshare/webs/files
 	cd /tmp
-	mkdir koolss
-	mkdir koolss/bin
-	mkdir koolss/scripts
-	mkdir koolss/init.d
-	mkdir koolss/webs
-	mkdir koolss/webs/res
-	TARGET_FOLDER=/tmp/koolss
+	mkdir justdoit
+	mkdir justdoit/bin
+	mkdir justdoit/scripts
+	mkdir justdoit/init.d
+	mkdir justdoit/webs
+	mkdir justdoit/webs/res
+	TARGET_FOLDER=/tmp/justdoit
 	cp $KSROOT/scripts/ss_install.sh $TARGET_FOLDER/install.sh
-	cp $KSROOT/scripts/uninstall_koolss.sh $TARGET_FOLDER/uninstall.sh
+	cp $KSROOT/scripts/uninstall_justdoit.sh $TARGET_FOLDER/uninstall.sh
 	cp $KSROOT/bin/ss-* $TARGET_FOLDER/bin/
 	cp $KSROOT/bin/obfs-local $TARGET_FOLDER/bin/
 	cp $KSROOT/bin/ssr-* $TARGET_FOLDER/bin/
@@ -196,19 +196,19 @@ case $2 in
 	cp $KSROOT/bin/haproxy $TARGET_FOLDER/bin/
 	cp $KSROOT/bin/kcpclient $TARGET_FOLDER/bin/
 	cp $KSROOT/scripts/ss_* $TARGET_FOLDER/scripts/
-	cp $KSROOT/init.d/S99koolss.sh $TARGET_FOLDER/init.d
-	cp $KSROOT/webs/Module_koolss.asp $TARGET_FOLDER/webs/
-	cp $KSROOT/webs/res/icon-koolss* $TARGET_FOLDER/webs/res/
+	cp $KSROOT/init.d/S99justdoit.sh $TARGET_FOLDER/init.d
+	cp $KSROOT/webs/Module_justdoit.asp $TARGET_FOLDER/webs/
+	cp $KSROOT/webs/res/icon-justdoit* $TARGET_FOLDER/webs/res/
 	cp -r $KSROOT/ss $TARGET_FOLDER/
 	rm -rf $TARGET_FOLDER/ss/*.json
 
-	tar -czv -f /koolshare/webs/files/koolss.tar.gz koolss/
+	tar -czv -f /koolshare/webs/files/justdoit.tar.gz justdoit/
 	rm -rf $TARGET_FOLDER
 	echo_date "打包完毕！该包可以在LEDE软件中心离线安装哦~" >> $LOG_FILE
 	http_response "$1"
 	echo XU6J03M6 >> $LOG_FILE
 	sleep 4
-	rm -rf /koolshare/webs/files/koolss*
+	rm -rf /koolshare/webs/files/justdoit*
 	;;
 7)
 	# 老实说，我是一个假的日志，其实订阅节点删除操作全部在web里和httpdb配合完成，完全没有脚本的事

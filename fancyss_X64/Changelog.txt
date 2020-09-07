@@ -99,7 +99,7 @@ Koolshare LEDE-X64 shadowsocks Changelog
    - update	订阅链接字符限制从200改到1024
 
 1.9.9
-   - update	为避免不必要的麻烦，更名为koolss
+   - update	为避免不必要的麻烦，更名为justdoit
    - add	ssr添加auth_chain_e/f支持
    - update	更新ss-libev ssr-libev二进制文件
    - fix	修复2.10固件游戏模式下udp不通的问题
@@ -172,7 +172,7 @@ Koolshare LEDE-X64 shadowsocks Changelog
    - fix	修复pdnsd tcp解析，dns端口显示错误的问题。
 
 1.9.0
-   - add	添加koolss和koolgame开启的判断；
+   - add	添加justdoit和koolgame开启的判断；
    - add	添加多wan情况下，ping，国内dns，vps ip线路选择；
    - add	添加KCP，负载均衡状态显示（此处显示进程状态，并非它们的网络连通性状态）
    - update	kcp加速情况下ss-tunnel走原默认线路而不是kcp流；

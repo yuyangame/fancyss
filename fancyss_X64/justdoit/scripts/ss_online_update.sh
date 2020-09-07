@@ -79,7 +79,7 @@ get_remote_config(){
 
 	[ -n "$group" ] && group_md5=`echo $group | md5sum | sed 's/ -//g'`
 	[ -n "$server" ] && server_md5=`echo $server | md5sum | sed 's/ -//g'`
-	##把全部服务器节点写入文件 /usr/share/koolss/serverconfig/all_onlineservers
+	##把全部服务器节点写入文件 /usr/share/justdoit/serverconfig/all_onlineservers
 	[ -n "$group" ] && [ -n "$server" ] && echo $server_md5 $group_md5 >> /tmp/all_onlineservers
 	#echo ------
 	#echo $server
@@ -96,7 +96,7 @@ get_remote_config(){
 }
 
 update_config(){
-	#isadded_server=$(uci show koolss | grep -c "server=\'$server\'")
+	#isadded_server=$(uci show justdoit | grep -c "server=\'$server\'")
 	isadded_server=$(cat /tmp/all_localservers | grep $group_md5 | awk '{print $1}' | grep -c $server_md5|head -n1)
 	if [ "$isadded_server" == "0" ]; then
 		add_ssr_servers

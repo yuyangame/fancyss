@@ -15,13 +15,13 @@ game_on=`dbus list ss_acl_mode|cut -d "=" -f 2 | grep 3`
 [ -n "$game_on" ] || [ "$ss_basic_mode" == "3" ] && mangle=1
 lan_ipaddr=`uci get network.lan.ipaddr`
 lan_ipaddr_prefix=`uci get network.lan.ipaddr`
-LOCK_FILE=/var/lock/koolss.lock
+LOCK_FILE=/var/lock/justdoit.lock
 ISP_DNS1=`cat /tmp/resolv.conf.auto|cut -d " " -f 2|grep -v 0.0.0.0|grep -v 127.0.0.1|grep ^[1-9]|sed -n 1p`
 ISP_DNS2=`cat /tmp/resolv.conf.auto|cut -d " " -f 2|grep -v 0.0.0.0|grep -v 127.0.0.1|grep ^[1-9]|sed -n 2p`
 IFIP=`echo $ss_basic_server|grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}|:"`
 ARG_OBFS=""
 # triggher shell
-ONSTART=`ps -l|grep $PPID|grep -v grep|grep "S99koolss"`
+ONSTART=`ps -l|grep $PPID|grep -v grep|grep "S99justdoit"`
 #ONMWAN3=`ps -l|grep $PPID|grep -v grep|grep "mwan3.user"`
 #ONFIRES=`ps -l|grep $PPID|grep -v grep|grep "firewall includes"`
 
@@ -107,10 +107,10 @@ restore_dnsmasq_conf(){
 }
 
 restore_start_file(){
-	echo_date 清除koolss防火墙配置...
+	echo_date 清除justdoit防火墙配置...
 	
 	uci -q batch <<-EOT
-	  delete firewall.ks_koolss
+	  delete firewall.ks_justdoit
 	  commit firewall
 	EOT
 }
@@ -340,7 +340,7 @@ ss_arg(){
 		fi
 	fi
 }
-# create koolss config file...
+# create justdoit config file...
 creat_ss_json(){
 	# creat normal ss json
 	echo_date 创建SS配置文件到$CONFIG_FILE
@@ -938,18 +938,18 @@ create_dnsmasq_conf(){
 #--------------------------------------------------------------------------------------
 auto_start(){
 	# nat start
-	echo_date 添加koolss防火墙规则
+	echo_date 添加justdoit防火墙规则
 	uci -q batch <<-EOT
-	  delete firewall.ks_koolss
-	  set firewall.ks_koolss=include
-	  set firewall.ks_koolss.type=script
-	  set firewall.ks_koolss.path=/koolshare/ss/ssstart.sh
-	  set firewall.ks_koolss.family=any
-	  set firewall.ks_koolss.reload=1
+	  delete firewall.ks_justdoit
+	  set firewall.ks_justdoit=include
+	  set firewall.ks_justdoit.type=script
+	  set firewall.ks_justdoit.path=/koolshare/ss/ssstart.sh
+	  set firewall.ks_justdoit.family=any
+	  set firewall.ks_justdoit.reload=1
 	  commit firewall
 	EOT
 
-	[ ! -L "/etc/rc.d/S99koolss.sh" ] && ln -sf $KSROOT/init.d/S99koolss.sh /etc/rc.d/S99koolss.sh
+	[ ! -L "/etc/rc.d/S99justdoit.sh" ] && ln -sf $KSROOT/init.d/S99justdoit.sh /etc/rc.d/S99justdoit.sh
 
 	# cron job
 	sed -i '/ssruleupdate/d' /etc/crontabs/root >/dev/null 2>&1
@@ -983,38 +983,38 @@ start_ss_redir(){
 		# ONLY TCP
 		if [ "$ss_basic_type" == "1" ];then
 			echo_date 开启ssr-redir进程，用于透明代理.
-			ssr-redir $SPECIAL_ARG -c $CONFIG_FILE -f /var/run/koolss.pid >/dev/null 2>&1
+			ssr-redir $SPECIAL_ARG -c $CONFIG_FILE -f /var/run/justdoit.pid >/dev/null 2>&1
 		elif  [ "$ss_basic_type" == "0" ];then
 			echo_date 开启ss-redir进程，用于透明代理.
 			if [ "$ss_basic_ss_obfs" == "0" ];then
-				ss-redir $SPECIAL_ARG -c $CONFIG_FILE -f /var/run/koolss.pid >/dev/null 2>&1
+				ss-redir $SPECIAL_ARG -c $CONFIG_FILE -f /var/run/justdoit.pid >/dev/null 2>&1
 			else
-				ss-redir $SPECIAL_ARG -c $CONFIG_FILE $ARG_OBFS -f /var/run/koolss.pid >/dev/null 2>&1
+				ss-redir $SPECIAL_ARG -c $CONFIG_FILE $ARG_OBFS -f /var/run/justdoit.pid >/dev/null 2>&1
 			fi
 		fi
 		# ONLY UDP
 		if [ "$ss_basic_type" == "1" ];then
 			echo_date 开启ssr-redir第二进程，用于kcp模式下udp的透明代理.
-			ssr-redir -c $CONFIG_FILE -U -f /var/run/koolss.pid >/dev/null 2>&1
+			ssr-redir -c $CONFIG_FILE -U -f /var/run/justdoit.pid >/dev/null 2>&1
 		elif  [ "$ss_basic_type" == "0" ];then
 			echo_date 开启ss-redir第二进程，用于kcp模式下udp的透明代理.
 			if [ "$ss_basic_ss_obfs" == "0" ];then
-				ss-redir -c $CONFIG_FILE -U -f /var/run/koolss.pid >/dev/null 2>&1
+				ss-redir -c $CONFIG_FILE -U -f /var/run/justdoit.pid >/dev/null 2>&1
 			else
-				ss-redir -c $CONFIG_FILE -U $ARG_OBFS -f /var/run/koolss.pid >/dev/null 2>&1
+				ss-redir -c $CONFIG_FILE -U $ARG_OBFS -f /var/run/justdoit.pid >/dev/null 2>&1
 			fi
 		fi
 	else
 		# Start ss-redir for nornal use
 		if [ "$ss_basic_type" == "1" ];then
 			echo_date 开启ssr-redir进程，用于透明代理.
-			ssr-redir $SPECIAL_ARG -c $CONFIG_FILE -u -f /var/run/koolss.pid >/dev/null 2>&1
+			ssr-redir $SPECIAL_ARG -c $CONFIG_FILE -u -f /var/run/justdoit.pid >/dev/null 2>&1
 		elif  [ "$ss_basic_type" == "0" ];then
 			echo_date 开启ss-redir进程，用于透明代理.
 			if [ "$ss_basic_ss_obfs" == "0" ];then
-				ss-redir $SPECIAL_ARG -c $CONFIG_FILE -u -f /var/run/koolss.pid >/dev/null 2>&1
+				ss-redir $SPECIAL_ARG -c $CONFIG_FILE -u -f /var/run/justdoit.pid >/dev/null 2>&1
 			else
-				ss-redir $SPECIAL_ARG -c $CONFIG_FILE -u $ARG_OBFS -f /var/run/koolss.pid >/dev/null 2>&1
+				ss-redir $SPECIAL_ARG -c $CONFIG_FILE -u $ARG_OBFS -f /var/run/justdoit.pid >/dev/null 2>&1
 			fi
 		fi
 	fi
@@ -1209,7 +1209,7 @@ lan_acess_control(){
 				[ -n "$ipaddr" ] && [ -n "$mac" ] && echo_date 加载ACL规则：【$ipaddr】【$mac】【$ports】模式为：$(get_mode_name $proxy_mode)
 			fi
 
-			# acl in koolss for mangle
+			# acl in justdoit for mangle
 			iptables -t mangle -A SHADOWSOCKS $(factor $ipaddr "-s") $(factor $mac "-m mac --mac-source") -p tcp $(factor $ports "-m multiport --dport") -$(get_jump_mode $proxy_mode) $(get_action_chain $proxy_mode)
 			[ "$proxy_mode" == "3" ] && iptables -t mangle -A SHADOWSOCKS $(factor $ipaddr "-s") $(factor $mac "-m mac --mac-source") -p udp $(factor $ports "-m multiport --dport") -$(get_jump_mode $proxy_mode) $(get_action_chain $proxy_mode)
 			[ `dbus get ss_acl_default_mode` == "3" ] && iptables -t mangle -A SHADOWSOCKS $(factor $ipaddr "-s") $(factor $mac "-m mac --mac-source") -p udp $(factor $ports "-m multiport --dport") -$(get_jump_mode $proxy_mode) $(get_action_chain $proxy_mode)
@@ -1382,12 +1382,12 @@ write_numbers(){
 }
 
 
-detect_koolss(){
-	[ -f "/etc/config/shadowsocks" ] && koolss_enable=`uci get shadowsocks.@global[0].global_server`
+detect_justdoit(){
+	[ -f "/etc/config/shadowsocks" ] && justdoit_enable=`uci get shadowsocks.@global[0].global_server`
 	SS_NU=`iptables -nvL PREROUTING -t nat |sed 1,2d | sed -n '/SHADOWSOCKS/='` 2>/dev/null
-	if [ -n "$SS_NU" ] && [ "$koolss_enable" != "nil" ];then
-		echo_date 检测到你开启了koolss！！！
-		echo_date 插件版本ss不能和koolss混用，如需使用插件ss，请关闭koolss！！
+	if [ -n "$SS_NU" ] && [ "$justdoit_enable" != "nil" ];then
+		echo_date 检测到你开启了justdoit！！！
+		echo_date 插件版本ss不能和justdoit混用，如需使用插件ss，请关闭justdoit！！
 	else
 		start_ok=1
 	fi
@@ -1395,17 +1395,17 @@ detect_koolss(){
 	KOOLGAME_NU=`iptables -nvL PREROUTING -t nat |sed 1,2d | sed -n '/KOOLGAME/='` 2>/dev/null
 	if [ -n "$KOOLGAME_NU" ];then
 		echo_date 检测到你开启了KOOLGAME！！！
-		echo_date koolss不能和KOOLGAME混用，请关闭KOOLGAME后启用本插件！！
+		echo_date justdoit不能和KOOLGAME混用，请关闭KOOLGAME后启用本插件！！
 	else
 		start_ok=1
 	fi
 
 	if [ "$start_ok" == "1" ];then
-		echo_date koolss插件符合启动条件！~
+		echo_date justdoit插件符合启动条件！~
 	else
 		echo_date 退出插件启动...
 		dbus set ss_basic_enable=0
-		echo_date ---------------------- 退出启动 LEDE koolss -----------------------
+		echo_date ---------------------- 退出启动 LEDE justdoit -----------------------
 		sleep 5
 		echo XU6J03M6
 		exit 1
@@ -1430,11 +1430,11 @@ restart_by_fw(){
 	# for nat
 	exec 1000>"$LOCK_FILE"
 	flock -x 1000
-	echo_date ----------------------------- LEDE 固件 koolss -------------------------------------
-	#[ -n "$ONMWAN3" ] && echo_date mwan3重启触发koolss重启！ 
-	echo_date 防火墙重启触发koolss重启！
+	echo_date ----------------------------- LEDE 固件 justdoit -------------------------------------
+	#[ -n "$ONMWAN3" ] && echo_date mwan3重启触发justdoit重启！ 
+	echo_date 防火墙重启触发justdoit重启！
 	echo_date ---------------------------------------------------------------------------------------
-	detect_koolss
+	detect_justdoit
 	calculate_wans_nu
 	restore_dnsmasq_conf
 	[ "$ss_lb_enable" == "1" ] && [ "$ss_basic_node" == "0" ] && [ -n "$ss_lb_node_max" ] && restart_dnsmasq
@@ -1448,7 +1448,7 @@ restart_by_fw(){
 	start_dns
 	create_dnsmasq_conf
 	restart_dnsmasq
-	echo_date ------------------------- koolss 重启完毕 -------------------------
+	echo_date ------------------------- justdoit 重启完毕 -------------------------
 	echo XU6J03M6
 	flock -u 1000
 	rm -rf "$LOCK_FILE"
@@ -1457,11 +1457,11 @@ restart_by_fw(){
 case $1 in
 restart)
 	# get_status >> /tmp/ss_start.txt
-	# used by web for start/restart; or by system for startup by S99koolss.sh in rc.d
+	# used by web for start/restart; or by system for startup by S99justdoit.sh in rc.d
 	exec 1000>"$LOCK_FILE"
 	flock -x 1000
-	echo_date ----------------------------- LEDE 固件 koolss -------------------------------------
-	[ -n "$ONSTART" ] && echo_date 路由器开机触发koolss启动！ || echo_date web提交操作触发koolss启动！
+	echo_date ----------------------------- LEDE 固件 justdoit -------------------------------------
+	[ -n "$ONSTART" ] && echo_date 路由器开机触发justdoit启动！ || echo_date web提交操作触发justdoit启动！
 	echo_date ---------------------------------------------------------------------------------------
 	# stop first
 	restore_dnsmasq_conf
@@ -1478,7 +1478,7 @@ restart)
 	kill_cron_job
 	echo_date ---------------------------------------------------------------------------------------
 	# start
-	detect_koolss
+	detect_justdoit
 	calculate_wans_nu
 	resolv_server_ip
 	ss_arg
@@ -1493,7 +1493,7 @@ restart)
 	start_dns
 	restart_dnsmasq
 	write_numbers
-	echo_date ------------------------- koolss 启动完毕 -------------------------
+	echo_date ------------------------- justdoit 启动完毕 -------------------------
 	flock -u 1000
 	rm -rf "$LOCK_FILE"
 	;;
@@ -1501,14 +1501,14 @@ stop)
 	exec 1000>"$LOCK_FILE"
 	flock -x 1000
 	#only used by web stop
-	echo_date ---------------------- LEDE 固件 koolss -----------------------
+	echo_date ---------------------- LEDE 固件 justdoit -----------------------
 	restore_dnsmasq_conf
 	restart_dnsmasq
 	flush_nat
 	restore_start_file
 	kill_process
 	kill_cron_job
-	echo_date ------------------------- koolss 成功关闭 -------------------------
+	echo_date ------------------------- justdoit 成功关闭 -------------------------
 	flock -u 1000
 	rm -rf "$LOCK_FILE"
 	;;
